@@ -11,14 +11,14 @@ fun getResult(remainingTime: Int, topics: List<Topic>) : Result {
 }
 
 fun getTopicsOrder(remainingTime: Int, topics: List<Topic>) : Array<IntArray> {
-    val dpArray = Array(topics.size) { IntArray(remainingTime) }
+    val dpArray = Array(topics.size + 1) { IntArray(remainingTime + 1) }
 
     for (k in 1 until dpArray.size) {
         for (s in 1 until dpArray[k].size) {
-            if (s >= topics[k].timeToLearn)
+            if (s >= topics[k - 1].timeToLearn)
                 dpArray[k][s] = max(
                     dpArray[k - 1][s],
-                    dpArray[k - 1][s - topics[k].timeToLearn] + topics[k].possibleQuestions
+                    dpArray[k - 1][s - topics[k - 1].timeToLearn] + topics[k - 1].possibleQuestions
                 )
             else
                 dpArray[k][s] = dpArray[k - 1][s]
