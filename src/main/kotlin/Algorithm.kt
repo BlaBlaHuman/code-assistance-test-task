@@ -30,16 +30,16 @@ fun getTopicsOrder(remainingTime: Int, topics: List<Topic>) : Array<IntArray> {
 
 fun restoreAnswer(topics: List<Topic>, arrDP: Array<IntArray>) : List<Int> {
     val answer = mutableListOf<Int>()
-    var sum = arrDP.last().last()
+    var sum = arrDP.last().size - 1
 
     for  (i in arrDP.indices.reversed()) {
         if (arrDP[i][sum] == 0)
             break
         if (arrDP[i - 1][sum] != arrDP[i][sum]) {
-            sum -= topics[i].timeToLearn
+            sum -= topics[i - 1].timeToLearn
             answer.add(i)
         }
     }
 
-    return answer
+    return answer.reversed()
 }
