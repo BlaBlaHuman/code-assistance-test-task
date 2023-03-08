@@ -42,7 +42,7 @@ fun restoreAnswer(topics: List<Topic>, arrDP: Array<IntArray>) : List<Int> {
     if (arrDP.isEmpty())
         return listOf()
 
-    var sum = arrDP.last().size - 1
+    var sum = arrDP.last().lastIndex
 
     if (sum < 0)
         return listOf()
