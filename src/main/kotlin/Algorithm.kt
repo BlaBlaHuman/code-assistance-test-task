@@ -4,7 +4,7 @@ data class Topic(val timeToLearn: Int, val possibleQuestions: Int)
 
 /**
  * Stores Dynamic Programming matrix and the maximum number of learned questions,
- * which is supposed to be equal to dpMatrix.last().last() (if this value exists, 0 otherwise)
+ * which is supposed to be equal to dpMatrix.last().last()
  */
 data class DPArray(val numberOfLearnedQuestions: Int, val dpMatrix: Array<IntArray>)
 
@@ -16,6 +16,12 @@ data class DPArray(val numberOfLearnedQuestions: Int, val dpMatrix: Array<IntArr
 data class Result(val numberOfLearnedQuestions: Int, val topicsSet: List<Int>)
 
 
+/**
+ * Combines two functions getDPArray and restoreAnswer together.
+ * Supposed to receive initial data and return the final answer.
+ * @param remainingTime - time remained to study
+ * @param topics - the set of all topics presented
+ */
 fun getResult(remainingTime: Int, topics: List<Topic>) : Result {
     val dpArray = getDPArray(remainingTime, topics)
     val topicsSet = restoreAnswer(topics, dpArray.dpMatrix)
@@ -44,14 +50,7 @@ fun getDPArray(remainingTime: Int, topics: List<Topic>) : DPArray {
         }
     }
 
-    val result = try {
-        dpArray.last().last()
-    }
-    catch (e: NoSuchElementException) {
-        0
-    }
-
-    return DPArray(result, dpArray)
+    return DPArray(dpArray.last().last(), dpArray)
 }
 
 /**
@@ -61,9 +60,6 @@ fun getDPArray(remainingTime: Int, topics: List<Topic>) : DPArray {
  * @return Set of all topics to be learnt in order to achieve the maximum possible number of learned questions
  */
 fun restoreAnswer(topics: List<Topic>, arrDP: Array<IntArray>) : List<Int> {
-    if (arrDP.isEmpty())
-        return listOf()
-
     val answer = mutableListOf<Int>()
     var sum = arrDP.first().lastIndex
 
