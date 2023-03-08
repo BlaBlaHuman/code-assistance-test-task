@@ -1,4 +1,6 @@
-
+/**
+ * parseInput() is used to handle NumberFormatException when reading the input
+ */
 fun parseInput() : Int {
     var x: Int? = null
 
@@ -12,6 +14,10 @@ fun parseInput() : Int {
 
     return x
 }
+
+/**
+ * Provides a simple CLI
+ */
 fun runTheAlgorithm() {
     println("Welcome to the Great Problem Solver!")
 
@@ -39,7 +45,7 @@ fun runTheAlgorithm() {
     println("With $remainingTime hours left the programmer can manage to learn ${result.numberOfLearnedQuestions}/$numberOfQuestions questions " +
             "by studying the following topics:")
 
-    result.topicsOrder.forEach {
+    result.topicsSet.forEach {
         print("$it ")
     }
 

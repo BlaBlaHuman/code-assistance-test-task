@@ -100,7 +100,7 @@ private val dataSetNoTopicsNoTime = TestData(0,
 class GetDPArrayTest {
     @ParameterizedTest
     @MethodSource("provideInputForGetDPArray")
-    fun testGetTopicsOrder(data: TestData){
+    fun testGetDPArray(data: TestData){
         assertEquals(data.correctResult.numberOfLearnedQuestions, getDPArray(data.remainingTime, data.topics).numberOfLearnedQuestions)
     }
 
@@ -124,7 +124,7 @@ class RestoreAnswerTest {
     @ParameterizedTest
     @MethodSource("provideInputForRestoreAnswer")
     fun testGetRestoreAnswer(data: TestData) {
-        assertEquals(data.correctResult.topicsOrder, restoreAnswer(data.topics, getDPArray(data.remainingTime, data.topics).dpMatrix))
+        assertEquals(data.correctResult.topicsSet, restoreAnswer(data.topics, getDPArray(data.remainingTime, data.topics).dpMatrix))
 
     }
     companion object {

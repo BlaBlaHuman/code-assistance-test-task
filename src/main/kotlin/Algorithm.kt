@@ -1,16 +1,34 @@
 import kotlin.math.max
 
 data class Topic(val timeToLearn: Int, val possibleQuestions: Int)
+
+/**
+ * Stores Dynamic Programming matrix and the maximum number of learned questions,
+ * which is supposed to be equal to dpMatrix.last().last() (if this value exists, 0 otherwise)
+ */
 data class DPArray(val numberOfLearnedQuestions: Int, val dpMatrix: Array<IntArray>)
-data class Result(val numberOfLearnedQuestions: Int, val topicsOrder: List<Int>)
+
+/**
+ * This pair is returned by the algorithm to the program
+ * @param numberOfLearnedQuestions - the maximum possible number of learned questions
+ * @param topicsSet - topics, which should be studied in order to achieve numberOfLearnedQuestions
+ */
+data class Result(val numberOfLearnedQuestions: Int, val topicsSet: List<Int>)
+
 
 fun getResult(remainingTime: Int, topics: List<Topic>) : Result {
     val dpArray = getDPArray(remainingTime, topics)
-    val topicsOrder = restoreAnswer(topics, dpArray.dpMatrix)
+    val topicsSet = restoreAnswer(topics, dpArray.dpMatrix)
 
-    return Result(dpArray.numberOfLearnedQuestions, topicsOrder)
+    return Result(dpArray.numberOfLearnedQuestions, topicsSet)
 }
 
+
+/**
+ * Generates the array of Dynamic Programming.
+ * @param remainingTime - time remained to study
+ * @param topics - the set of all topics presented
+ */
 fun getDPArray(remainingTime: Int, topics: List<Topic>) : DPArray {
     val dpArray = Array(topics.size + 1) { IntArray(remainingTime + 1) }
 
@@ -36,16 +54,18 @@ fun getDPArray(remainingTime: Int, topics: List<Topic>) : DPArray {
     return DPArray(result, dpArray)
 }
 
+/**
+ * Restores the answer for a given set of topics  and DP array
+ * @param topics - all topics presented
+ * @param arrDP - the array of Dynamic Programming
+ * @return Set of all topics to be learnt in order to achieve the maximum possible number of learned questions
+ */
 fun restoreAnswer(topics: List<Topic>, arrDP: Array<IntArray>) : List<Int> {
-    val answer = mutableListOf<Int>()
-
     if (arrDP.isEmpty())
         return listOf()
 
-    var sum = arrDP.last().lastIndex
-
-    if (sum < 0)
-        return listOf()
+    val answer = mutableListOf<Int>()
+    var sum = arrDP.first().lastIndex
 
     for  (i in arrDP.indices.reversed()) {
         if (arrDP[i][sum] == 0)
