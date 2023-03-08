@@ -7,7 +7,12 @@ fun getResult(remainingTime: Int, topics: List<Topic>) : Result {
     val dpArray = getTopicsOrder(remainingTime, topics)
     val answer = restoreAnswer(topics, dpArray)
 
-    return Result(dpArray.last().last(), answer)
+    return try {
+        Result(dpArray.last().last(), answer)
+    }
+    catch (e: NoSuchElementException) {
+        Result(0, listOf())
+    }
 }
 
 fun getTopicsOrder(remainingTime: Int, topics: List<Topic>) : Array<IntArray> {
@@ -30,7 +35,14 @@ fun getTopicsOrder(remainingTime: Int, topics: List<Topic>) : Array<IntArray> {
 
 fun restoreAnswer(topics: List<Topic>, arrDP: Array<IntArray>) : List<Int> {
     val answer = mutableListOf<Int>()
+
+    if (arrDP.isEmpty())
+        return listOf()
+
     var sum = arrDP.last().size - 1
+
+    if (sum < 0)
+        return listOf()
 
     for  (i in arrDP.indices.reversed()) {
         if (arrDP[i][sum] == 0)
