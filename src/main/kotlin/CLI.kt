@@ -1,15 +1,18 @@
 /**
- * parseInput() is used to handle NumberFormatException when reading the input
+ * parseInput() is used to read a non-negative number from standard input
  */
 fun parseInput() : Int {
     var x: Int? = null
 
-    while (x == null) {
+    while (x == null || x < 0) {
         try {
             x = readln().toInt()
+            if (x < 0)
+                println("Please, enter a non-negative number. Try again:")
         } catch (e: NumberFormatException) {
-            println("Seems like that's not a number, try again:")
+            println("Seems like that's not a number. Try again:")
         }
+
     }
 
     return x
