@@ -101,7 +101,7 @@ class GetDPArrayTest {
     @ParameterizedTest
     @MethodSource("provideInputForGetDPArray")
     fun testGetDPArray(data: TestData){
-        assertEquals(data.correctResult.numberOfLearnedQuestions, getDPArray(data.remainingTime, data.topics).numberOfLearnedQuestions)
+        assertEquals(data.correctResult.numberOfLearnedQuestions, getDPArray(data.remainingTime, data.topics).last().last())
     }
 
     companion object {
@@ -124,7 +124,7 @@ class RestoreAnswerTest {
     @ParameterizedTest
     @MethodSource("provideInputForRestoreAnswer")
     fun testGetRestoreAnswer(data: TestData) {
-        assertEquals(data.correctResult.topicsSet, restoreAnswer(data.topics, getDPArray(data.remainingTime, data.topics).dpMatrix))
+        assertEquals(data.correctResult.topicsSet, restoreAnswer(data.topics, getDPArray(data.remainingTime, data.topics)))
 
     }
     companion object {

@@ -3,12 +3,6 @@ import kotlin.math.max
 data class Topic(val timeToLearn: Int, val possibleQuestions: Int)
 
 /**
- * Stores Dynamic Programming matrix and the maximum number of learned questions,
- * which is supposed to be equal to dpMatrix.last().last()
- */
-data class DPArray(val numberOfLearnedQuestions: Int, val dpMatrix: Array<IntArray>)
-
-/**
  * This pair is returned by the algorithm to the program
  * @param numberOfLearnedQuestions - the maximum possible number of learned questions
  * @param topicsSet - topics, which should be studied in order to achieve numberOfLearnedQuestions
@@ -24,9 +18,9 @@ data class Result(val numberOfLearnedQuestions: Int, val topicsSet: List<Int>)
  */
 fun getResult(remainingTime: Int, topics: List<Topic>) : Result {
     val dpArray = getDPArray(remainingTime, topics)
-    val topicsSet = restoreAnswer(topics, dpArray.dpMatrix)
+    val topicsSet = restoreAnswer(topics, dpArray)
 
-    return Result(dpArray.numberOfLearnedQuestions, topicsSet)
+    return Result(dpArray.last().last(), topicsSet)
 }
 
 
@@ -35,7 +29,7 @@ fun getResult(remainingTime: Int, topics: List<Topic>) : Result {
  * @param remainingTime - time remained to study
  * @param topics - the set of all topics presented
  */
-fun getDPArray(remainingTime: Int, topics: List<Topic>) : DPArray {
+fun getDPArray(remainingTime: Int, topics: List<Topic>) : Array<IntArray> {
     val dpArray = Array(topics.size + 1) { IntArray(remainingTime + 1) }
 
     for (k in 1 until dpArray.size) {
@@ -50,7 +44,7 @@ fun getDPArray(remainingTime: Int, topics: List<Topic>) : DPArray {
         }
     }
 
-    return DPArray(dpArray.last().last(), dpArray)
+    return dpArray
 }
 
 /**
