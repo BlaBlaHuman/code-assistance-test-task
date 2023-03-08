@@ -1,21 +1,17 @@
 import kotlin.math.max
 
 data class Topic(val timeToLearn: Int, val possibleQuestions: Int)
+data class DPArray(val numberOfLearnedQuestions: Int, val dpMatrix: Array<IntArray>)
 data class Result(val numberOfLearnedQuestions: Int, val topicsOrder: List<Int>)
 
 fun getResult(remainingTime: Int, topics: List<Topic>) : Result {
-    val dpArray = getTopicsOrder(remainingTime, topics)
-    val answer = restoreAnswer(topics, dpArray)
+    val dpArray = getDPArray(remainingTime, topics)
+    val topicsOrder = restoreAnswer(topics, dpArray.dpMatrix)
 
-    return try {
-        Result(dpArray.last().last(), answer)
-    }
-    catch (e: NoSuchElementException) {
-        Result(0, listOf())
-    }
+    return Result(dpArray.numberOfLearnedQuestions, topicsOrder)
 }
 
-fun getTopicsOrder(remainingTime: Int, topics: List<Topic>) : Array<IntArray> {
+fun getDPArray(remainingTime: Int, topics: List<Topic>) : DPArray {
     val dpArray = Array(topics.size + 1) { IntArray(remainingTime + 1) }
 
     for (k in 1 until dpArray.size) {
@@ -30,7 +26,14 @@ fun getTopicsOrder(remainingTime: Int, topics: List<Topic>) : Array<IntArray> {
         }
     }
 
-    return dpArray
+    val result = try {
+        dpArray.last().last()
+    }
+    catch (e: NoSuchElementException) {
+        0
+    }
+
+    return DPArray(result, dpArray)
 }
 
 fun restoreAnswer(topics: List<Topic>, arrDP: Array<IntArray>) : List<Int> {
